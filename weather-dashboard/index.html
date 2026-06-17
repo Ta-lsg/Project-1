@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Dashboard</title>
+  <style>
+    body { font-family: Arial; background: linear-gradient(135deg, #00b4db, #0083b0); color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .container { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 2rem; border-radius: 20px; text-align: center; }
+    input, button { padding: 0.7rem; margin: 0.5rem; border: none; border-radius: 8px; }
+    #weather { margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Weather Dashboard</h1>
+    <input type="text" id="city" placeholder="Enter city">
+    <button onclick="getWeather()">Search</button>
+    <div id="weather"></div>
+  </div>
+  <script>
+    const apiKey = 'YOUR_OPENWEATHER_API_KEY'; // get free key from openweathermap.org
+    async function getWeather() {
+      const city = document.getElementById('city').value;
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+      const data = await res.json();
+      if (data.cod === 200) {
+        document.getElementById('weather').innerHTML = `
+          <h2>${data.name}</h2>
+          <p>${data.weather[0].description}</p>
+          <h3>${data.main.temp}°C</h3>
+        `;
+      } else {
+        document.getElementById('weather').innerHTML = '<p>City not found</p>';
+      }
+    }
+  </script>
+</body>
+</html>
